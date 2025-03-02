@@ -14,16 +14,41 @@ class Stalker:
     def __init__(self) -> None:
         # Set up the argument parser
         self.version = "0.0.1"
-        self.UpdateURL = "https://raw.githubusercontent.com/SORRYSPLASH/Stalker/main/Stalker"
-        self.parser = argparse.ArgumentParser(description="Stalker Version {} By SS5453".format(self.version), epilog="SS5453 Does not condone the use of this tool for illegal purposes. Use at your own risk.")
+        self.UpdateURL = (
+            "https://raw.githubusercontent.com/SORRYSPLASH/Stalker/main/Stalker"
+        )
+        self.parser = argparse.ArgumentParser(
+            description="Stalker Version {} By SS5453".format(self.version),
+            epilog="SS5453 Does not condone the use of this tool for illegal purposes. Use at your own risk.",
+        )
 
         # Add the arguments
-        self.parser.add_argument("--version", action="version", version="Stalker Version {}".format(self.version))
-        self.parser.add_argument("-p", "--phone", metavar="{Phone Number}", help="Phone number to get information on.")
-        self.parser.add_argument("-v", "--verbose", action="store_true", help="Enable verbose output.")
-        self.parser.add_argument("-u", "--username", nargs=1, metavar="{Social Media Username}", help="Social media username to get information on.")
-        self.parser.add_argument("--update", action="store_true", help="Update Stalker to the latest version.")
-
+        self.parser.add_argument(
+            "--version",
+            action="version",
+            version="Stalker Version {}".format(self.version),
+        )
+        self.parser.add_argument(
+            "-p",
+            "--phone",
+            metavar="{Phone Number}",
+            help="Phone number to get information on.",
+        )
+        self.parser.add_argument(
+            "-v", "--verbose", action="store_true", help="Enable verbose output."
+        )
+        self.parser.add_argument(
+            "-u",
+            "--username",
+            nargs=1,
+            metavar="{Social Media Username}",
+            help="Social media username to get information on.",
+        )
+        self.parser.add_argument(
+            "--update",
+            action="store_true",
+            help="Update Stalker to the latest version.",
+        )
 
     """
         try:
@@ -37,7 +62,6 @@ class Stalker:
         except Exception:
             pass
     """
-
 
     def parse(self):
         self.args = self.parser.parse_args()
@@ -64,7 +88,9 @@ class Stalker:
                 number = phonenumbers.parse(args)
                 if self.args.verbose:
                     print("[^] Phone number parsed successfully: {}".format(number))
-                if not phonenumbers.is_valid_number(number) or not phonenumbers.is_possible_number(number):
+                if not phonenumbers.is_valid_number(
+                    number
+                ) or not phonenumbers.is_possible_number(number):
                     if self.args.verbose:
                         print("[^] Phone number validation failed.")
                     print("[-] Invalid phone number.")
@@ -76,10 +102,18 @@ class Stalker:
                 sys.exit(1)
             if self.args.verbose:
                 print("[^] Phone number validation passed.")
-            number_national = phonenumbers.format_number(number, phonenumbers.PhoneNumberFormat.NATIONAL)
-            number_international = phonenumbers.format_number(number, phonenumbers.PhoneNumberFormat.INTERNATIONAL)
-            number_e164 = phonenumbers.format_number(number, phonenumbers.PhoneNumberFormat.E164)
-            number_rfc3966 = phonenumbers.format_number(number, phonenumbers.PhoneNumberFormat.RFC3966)
+            number_national = phonenumbers.format_number(
+                number, phonenumbers.PhoneNumberFormat.NATIONAL
+            )
+            number_international = phonenumbers.format_number(
+                number, phonenumbers.PhoneNumberFormat.INTERNATIONAL
+            )
+            number_e164 = phonenumbers.format_number(
+                number, phonenumbers.PhoneNumberFormat.E164
+            )
+            number_rfc3966 = phonenumbers.format_number(
+                number, phonenumbers.PhoneNumberFormat.RFC3966
+            )
             number_carrier = carrier.name_for_number(number, "en")
             number_timezone = timezone.time_zones_for_number(number)
             number_geocoder = geocoder.description_for_number(number, "en")
@@ -97,77 +131,149 @@ class Stalker:
                 print("[^] Information retrieval completed.")
             print("[!] Done.")
         elif self.args.username:
-            args = self.args.username
-            sitedict = {
-                "youtube": {
-                    "url": "https://www.youtube.com/@{}".format(args[0]),
-                    "error": "https://www.youtube.com/noneexistinguserorerror"
-                },
-                "instagram": {
-                    "url": "https://www.instagram.com/{}".format(args[0]),
-                    "error": "https://www.instagram.com/noneexistinguserorerror/"
-                },
-                "roblox": {
-                    "url": "https://www.roblox.com/user.aspx?username={}".format(args[0]),
-                    "error": "https://www.roblox.com/user.aspx?username=noneexistinguserorerror"
-                },
-                "github": {
-                    "url": "https://www.github.com/{}".format(args[0]),
-                    "error": "https://www.github.com/noneexistinguserorerror"
-                },
-                "snapchat": {
-                    "url": "https://www.snapchat.com/add/{}".format(args[0]),
-                    "error": "https://www.snapchat.com/add/noneexistinguserorerror"
-                },
-                "reddit": {
-                    "url": "https://www.reddit.com/user/{}".format(args[0]),
-                    "error": "https://www.reddit.com/user/noneexistinguserorerror"
-                },
-                "soundcloud": {
-                    "url": "https://soundcloud.com/{}".format(args[0]),
-                    "error": "https://soundcloud.com/noneexistinguserorerror"
-                },
-                "twitch": {
-                    "url": "https://www.twitch.tv/{}".format(args[0]),
-                    "error": "https://www.twitch.tv/noneexistinguserorerror"
-                },
-                "tiktok": {
-                    "url": "https://www.tiktok.com/@{}".format(args[0]),
-                    "error": "https://www.tiktok.com/@noneexistinguserorerror"
-                },
-                "spotify": {
-                    "url": "https://open.spotify.com/user/{}".format(args[0]),
-                    "error": "https://open.spotify.com/user/noneexistinguserorerror"
-                },
-                "deviantart": {
-                    "url": "https://www.deviantart.com/{}".format(args[0]),
-                    "error": "https://www.deviantart.com/noneexistinguserorerror"
+            original_username = self.args.username[0]
+            # Generate a few username variants
+            variants = [
+                original_username,
+                original_username + "123",
+                original_username + "0",
+                original_username + "1",
+                original_username + "_",
+                original_username + "-",
+                "xX" + original_username + "Xx",
+                original_username + "official",
+                original_username + "real",
+                original_username.capitalize(),
+                original_username.upper(),
+                original_username.lower(),
+                original_username + "2025",
+                "the" + original_username,
+                original_username + "99",
+                original_username + "x",
+                original_username + "xx",
+                original_username + "2023",
+                original_username[::-1],  # reversed username
+                original_username + "_007",
+                original_username + "pro",
+                "mr" + original_username,
+                original_username + "2024",
+                original_username + "--",
+                original_username + "__",
+            ]
+            print("[!] Generated username variants:")
+            for i, variant in enumerate(variants, start=1):
+                print("   {}. {}".format(i, variant))
+
+            # Ask if the user wants to search all variants
+            search_all = (
+                input("Search using all variants? (y/N): ").strip().lower() == "y"
+            )
+            if not search_all:
+                # Ask user to select one variant if not searching all
+                while True:
+                    try:
+                        choice = int(
+                            input("Select a variant [1-{}]: ".format(len(variants)))
+                        )
+                        if 1 <= choice <= len(variants):
+                            search_variants = [variants[choice - 1]]
+                            break
+                        else:
+                            print("Invalid selection, try again.")
+                    except ValueError:
+                        print("Enter a valid number.")
+            else:
+                search_variants = variants
+
+            for chosen_username in search_variants:
+                print(
+                    "[!] Searching using username variation: {}".format(chosen_username)
+                )
+                # Build a site dictionary for the current variant
+                sitedict = {
+                    "youtube": {
+                        "url": "https://www.youtube.com/@{}".format(chosen_username),
+                        "error": "https://www.youtube.com/noneexistinguserorerror",
+                    },
+                    "instagram": {
+                        "url": "https://www.instagram.com/{}".format(chosen_username),
+                        "error": "https://www.instagram.com/noneexistinguserorerror/",
+                    },
+                    "roblox": {
+                        "url": "https://www.roblox.com/user.aspx?username={}".format(
+                            chosen_username
+                        ),
+                        "error": "https://www.roblox.com/user.aspx?username=noneexistinguserorerror",
+                    },
+                    "github": {
+                        "url": "https://www.github.com/{}".format(chosen_username),
+                        "error": "https://www.github.com/noneexistinguserorerror",
+                    },
+                    "snapchat": {
+                        "url": "https://www.snapchat.com/add/{}".format(
+                            chosen_username
+                        ),
+                        "error": "https://www.snapchat.com/add/noneexistinguserorerror",
+                    },
+                    "reddit": {
+                        "url": "https://www.reddit.com/user/{}".format(chosen_username),
+                        "error": "https://www.reddit.com/user/noneexistinguserorerror",
+                    },
+                    "soundcloud": {
+                        "url": "https://soundcloud.com/{}".format(chosen_username),
+                        "error": "https://soundcloud.com/noneexistinguserorerror",
+                    },
+                    "twitch": {
+                        "url": "https://www.twitch.tv/{}".format(chosen_username),
+                        "error": "https://www.twitch.tv/noneexistinguserorerror",
+                    },
+                    "tiktok": {
+                        "url": "https://www.tiktok.com/@{}".format(chosen_username),
+                        "error": "https://www.tiktok.com/@noneexistinguserorerror",
+                    },
+                    "spotify": {
+                        "url": "https://open.spotify.com/user/{}".format(
+                            chosen_username
+                        ),
+                        "error": "https://open.spotify.com/user/noneexistinguserorerror",
+                    },
+                    "deviantart": {
+                        "url": "https://www.deviantart.com/{}".format(chosen_username),
+                        "error": "https://www.deviantart.com/noneexistinguserorerror",
+                    },
                 }
-            }
-            
-            print("[!] Getting information on {}".format(args[0]))
-            for site, info in sitedict.items():
-                if self.args.verbose:
-                    print("[^] Attempting to get information on {}...".format(site))
-                user = req.get(info["url"])
-                error = req.get(info["error"])
-                if user.status_code == req.codes.not_found:
+                print("[!] Getting information on {}".format(chosen_username))
+                for site, info in sitedict.items():
                     if self.args.verbose:
-                        print("[^] User not found on {} Because err status.".format(site))
-                    continue
-                elif user.status_code == req.codes.ok:
-                    UserSource = BeautifulSoup(user.text, "lxml")
-                    ErrorSource = BeautifulSoup(error.text, "lxml")
-                    if UserSource.text == ErrorSource.text:
+                        print("[^] Attempting to get information on {}...".format(site))
+                    user = req.get(info["url"])
+                    error = req.get(info["error"])
+                    if user.status_code == req.codes.not_found:
                         if self.args.verbose:
-                            print("[^] User not found on {} Because err src.".format(site))
+                            print(
+                                "[^] User not found on {} because of status code.".format(
+                                    site
+                                )
+                            )
                         continue
-                    else:
-                        print("[\"{}\"]".format(info["url"]))
+                    elif user.status_code == req.codes.ok:
+                        UserSource = BeautifulSoup(user.text, "lxml")
+                        ErrorSource = BeautifulSoup(error.text, "lxml")
+                        if UserSource.text == ErrorSource.text:
+                            if self.args.verbose:
+                                print(
+                                    "[^] User not found on {} due to identical page content.".format(
+                                        site
+                                    )
+                                )
+                            continue
+                        else:
+                            print('["{}"]'.format(info["url"]))
                     if self.args.verbose:
-                        print("[^] Information retrieval completed.")
-                    print("[!] Done.")
-"""
+                        print(
+                            "[^] Information retrieval completed for {}.".format(site)
+                        )
+            print("[!] Done.")
         elif self.args.update:
             print("[!] Fetching latest version...")
             try:
@@ -175,8 +281,6 @@ class Stalker:
                 # Get the contents of this python file
                 with open(sys.argv[0], "r") as f:
                     contents = f.read()
-                    print(contents)
-                    f.close()
                 if version.text == contents:
                     print("[+] You are running the latest version.")
                     sys.exit(0)
@@ -186,7 +290,6 @@ class Stalker:
                     with open(sys.argv[0], "w") as f:
                         f.truncate(0)
                         f.write(version.text)
-                        f.close()
                     print("[+] Update completed.")
                     sys.exit(0)
             except req.exceptions.ConnectionError:
@@ -202,7 +305,6 @@ class Stalker:
         else:
             self.parser.print_help()
             sys.exit(0)
-"""       
 
 
 ### Main ###
@@ -212,6 +314,6 @@ if __name__ == "__main__":
         stalker.parse()
     except Exception as e:
         if stalker.args.verbose:
-            print("[^] {}.". format(e))
+            print("[^] {}.".format(e))
         print("An error occured.\n{}".format(e))
     sys.exit(0)
